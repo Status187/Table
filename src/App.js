@@ -2,7 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import {Table} from "./component/Table";
 import * as api from "./api/UsersApi";
-import {getAccess} from "./api/UsersApi";
+import {getAccess, getAuth} from "./api/UsersApi";
+import {ButtonAddUser} from "./component/ButtonAddUser";
+import {AddUserModal} from "./component/AddUserModal";
 
 // import makeData from './makeData'
 
@@ -78,22 +80,21 @@ function App() {
         []
     )
 
+    const [isOpen, setIsOpen] = React.useState(false)
+
     const [data, setData] = React.useState()
 
     React.useEffect( () => {
-        api.getUsers(0, 'asc' ).then( (users) => {
-            setData(users);
-        })
+            api.getUsers(0, 'asc').then((users) => {
+                setData(users);
+            })
     }, [])
-    // React.useEffect( () => {
-    //     api.getUsers(0, 'asc' ).then( (users) => {
-    //         setData(users);
-    //     })
-    // }, [])
 
     return ( data ?
         <StylesWrapper>
             <Table columns={columns} data={data} />
+            <ButtonAddUser showModal={() => {setIsOpen(true)}}/>
+            <AddUserModal isOpen={isOpen} closeModal={() => {setIsOpen(false)}}/>
         </StylesWrapper>
             : <div>Loading</div>
     )
